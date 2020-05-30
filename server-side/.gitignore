@@ -1,0 +1,6 @@
+package-lock.json
+.env
+__tests__
+database
+.DS_Store
+node_modules

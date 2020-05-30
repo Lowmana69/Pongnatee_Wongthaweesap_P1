@@ -6,5 +6,4 @@ import session from 'express-session';
 
 /* Import Files */
 
-import keys from './config/keys';
-import passportSetup from '';
+import keys from '../config/keys';
