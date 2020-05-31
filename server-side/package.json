@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Lowmana69/Pongnatee_Wongthaweesap_P1#readme",
   "devDependencies": {
+    "@types/validator": "^13.0.0",
     "@types/express": "^4.17.6",
     "@types/jest": "^25.2.3",
     "@types/node": "^14.0.6",

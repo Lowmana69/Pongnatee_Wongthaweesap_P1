@@ -9,3 +9,9 @@ exports.company = {
     portal: process.env.COMPANY_ACCESS_PORTAL,
     primary: process.env.COMPANY_ACCESS_PRIMARY
 };
+
+exports.database = {
+    name: process.env.DATABASE_ACCESS_PORTAL,
+    port: process.env.DATABASE_PORT,
+    hostess: process.env.HOSTESS
+};
