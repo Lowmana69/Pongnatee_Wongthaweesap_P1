@@ -38,11 +38,12 @@ db.on('connect', (client) => {
 
 /* Testing Sequelize connection to the Database */
 
-Sequelize
-  .authenticate()
-  .then(() => {
+sequelize
+  .authenticate(() => {
+  try {
+    await sequelize.authenticate();
     console.log('Connection has been established successfully.');
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+});
