@@ -13,5 +13,10 @@ exports.company = {
 exports.database = {
     name: process.env.DATABASE_ACCESS_PORTAL,
     port: process.env.DATABASE_PORT,
-    hostess: process.env.HOSTESS
+    hostess: process.env.DATABASE_HOSTESS,
+    private: process.env.DATABASE_ACCESS_KEY
 };
+
+exports.local = {
+    pin: process.env.LOCALHOST
+}

@@ -1,5 +1,6 @@
 /* Import Modules */
 
+import 'dotenv/config';
 import Sequelize from 'sequelize';
 import { Pool } from 'pg';
 
@@ -13,8 +14,8 @@ export const db = new Pool({
     database: keys.database.name,
     port: keys.database.port,
     host: keys.company.portal,
-    user: process.env.,
-    password: process.env.
+    user: keys.database.name,
+    password:keys.database.private
 });
 
 /* Give Sequelize access to the Database */
@@ -39,7 +40,7 @@ db.on('connect', (client) => {
 /* Testing Sequelize connection to the Database */
 
 sequelize
-  .authenticate(() => {
+  .authenticate( async () => {
   try {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');

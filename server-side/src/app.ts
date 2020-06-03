@@ -1,13 +1,13 @@
 /* Import Modules */
 
-require('dotenv').config();
+import 'dotenv/config';
 import express from 'express';
 import passport from 'passport';
 import session from 'express-session';
 
 /* Import Files */
 
-import keys from '../config/keys';
+import { keys } from '../config/keys';
 
 
 /* Initialize Express */
@@ -16,7 +16,7 @@ const app = express();
 
 /* Setting Up PORT */
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || keys.local.pin;
 app.set('PORT', PORT);
 
 /* Registering Middleware */
