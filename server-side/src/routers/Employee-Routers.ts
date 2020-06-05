@@ -1,18 +1,63 @@
 /* Import Modules */
 
-import express from 'express';
+import express, { response } from 'express';
 
 /* Import Files */
 
-import * as employeeService from '../services/Employee-Services';
+import * as employeesService from '../services/Employee-Services';
 
-export const employeeRouter = express.Router();
+/* Export Employee Router */
+
+export const employeesRouter = express.Router();
 
 /* =============== READ / RETRIEVE ============= */
 
 /* GET */
 
+employeesRouter.get('', async (request, response, next) => {
+
+    try {
+
+        const employees = await employeesService.getAllEmployees();
+
+        response.json(employees);
+
+    } catch (error) {
+
+        response.sendStatus(500);
+
+    } 
+});
+
 /* GET */
+
+employeesRouter.get('', async (request, response, next) => {
+
+    const employeeId = +request.params.id;
+
+    try {
+
+        const checkEmployeeId = await employeesService.getEmployeeByID(employeeId);
+
+        if (!checkEmployeeId) {
+
+            response.sendStatus(404);
+
+        } else {
+
+            response.json(employeeId);
+        }
+
+        next();
+
+    } catch (error) {
+
+        response.sendStatus(500);
+
+        next();
+
+    }
+});
 
 /* GET */
 
@@ -22,6 +67,54 @@ export const employeeRouter = express.Router();
 
 /* POST */
 
+employeesRouter.post('', async (request, response, next) => {
+
+    const employeeInfo = request.body;
+
+    try {
+    
+        const newEmployee = await employeesService.createNewEmployee(employeeInfo);
+
+        response.sendStatus(201).json(newEmployee);
+
+        next();
+
+    } catch (error) {
+
+        response.sendStatus(500);
+
+        next();
+    }
+});
+
 /* ===================== UPDATE ================= */
 
 /* PATCH */
+
+employeesRouter.patch('', async (request, response, next) => {
+
+    const employeeInfo = request.body;
+
+    try {
+
+        const employeeUpdate = await employeesService.updateEmployee(employeeInfo);
+
+        if (employeeUpdate) {
+
+            response.json(employeeUpdate);
+
+        } else {
+
+            response.sendStatus(404);
+
+        }
+
+        next();
+
+    } catch (error) {
+
+        response.sendStatus(500);
+
+        next();
+    }
+});

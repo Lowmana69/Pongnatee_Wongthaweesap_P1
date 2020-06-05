@@ -7,14 +7,14 @@ import * as reimbursementDao from '../daos/Reimbursement-Daos';
 
 /* GET */
 
-export function getAllReimbursement (): Promise<Reimbursement[]> {
-    return reimbursementDao.getAllReimbursement();
+export function getAllReimbursements (): Promise<Reimbursement[]> {
+    return reimbursementDao.getAllReimbursements();
 };
 
 /* GET */
 
-export function getReimbursementByUserID (id: number): Promise<Reimbursement> {
-    return reimbursementDao.getReimbursementByUserID(id);
+export function getAllReimbursementByUserID (reimb_author: number): Promise<Reimbursement[]> {
+    return reimbursementDao.getAllReimbursementByUserID(reimb_author);
 };
 
 /* GET */
@@ -64,13 +64,11 @@ export function createNewReimbursement (reimbursement: any): Promise<Reimburseme
 export function updateReimbursement (input: any): Promise<Reimbursement> {
 
     const reimbursement = new Reimbursement (
-        input.Id,input.Amount,
-        input.Submitted,
-        input.Resolved,
-        input.Description,
-        input.Receipt, input.Author,
-        input.Resolver, input.Status,
-        input.Type
+        input.Id, input.Author,
+        input.Amount, input.Submitted,
+        input.Resolved, input.Description,
+        input.Receipt, input.Resolver,
+        input.Status, input.Type
     );
 
     if (!reimbursement.Id) {

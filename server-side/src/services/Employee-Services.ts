@@ -1,20 +1,20 @@
 /* Import Files */
 
 import { Employee } from '../models/Employee';
-import * as employeeDao from '../daos/Employee-Daos';
+import * as employeesDao from '../daos/Employee-Daos';
 
 /* ============== READ / RETRIEVE ============== */
 
 /* GET */
 
 export function getAllEmployees (): Promise<Employee[]> {
-    return employeeDao.getAllEmployees();
+    return employeesDao.getAllEmployees();
 };
 
 /* GET */
 
 export function getEmployeeByID (id: number): Promise<Employee> {
-    return employeeDao.getEmployeeByID(id);
+    return employeesDao.getEmployeeByID(id);
 };
 
 /* GET */
@@ -42,7 +42,7 @@ export function createNewEmployee (employee: any): Promise<Employee> {
     );
 
     if (params) {
-        return employeeDao.createNewEmployee(newEmployee);
+        return employeesDao.createNewEmployee(newEmployee);
     } else {
         return new Promise((resolve, reject) => reject(422));
     }
@@ -65,5 +65,5 @@ export function updateEmployee (input: any): Promise<Employee> {
         throw new Error('400');
     }
 
-    return employeeDao.updateEmployee(employee);
+    return employeesDao.updateEmployee(employee);
 };
