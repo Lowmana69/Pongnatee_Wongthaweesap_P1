@@ -7,7 +7,7 @@ import session from 'express-session';
 
 /* Import Files */
 
-import { keys } from '../config/keys';
+import { local } from '../config/keys';
 
 
 /* Initialize Express */
@@ -16,7 +16,7 @@ const app = express();
 
 /* Setting Up PORT */
 
-const PORT = process.env.PORT || keys.local.pin;
+const PORT = process.env.PORT || local.pin;
 app.set('PORT', PORT);
 
 /* Registering Middleware */

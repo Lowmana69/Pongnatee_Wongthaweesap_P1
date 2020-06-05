@@ -6,25 +6,25 @@ import { Pool } from 'pg';
 
 /* Import Files */
 
-import keys from './keys';
+import { database, company } from './keys';
 
 /* Connecting to the Database */
 
 export const db = new Pool({
-    database: keys.database.name,
-    port: keys.database.port,
-    host: keys.company.portal,
-    user: keys.database.name,
-    password:keys.database.private
+    database: database.name,
+    port: database.port,
+    host: company.portal,
+    user: database.name,
+    password:database.private
 });
 
 /* Give Sequelize access to the Database */
 
 const sequelize = new Sequelize(
-  keys.database.name,
+  database.name,
   'username',
   'password', {
-    host: keys.database.hostess,
+    host: database.hostess,
     dialect: 'postgres'
 });
 
