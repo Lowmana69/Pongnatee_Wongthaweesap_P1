@@ -1,6 +1,7 @@
 /* Import Modules */
 
 import 'dotenv/config';
+import 'reflect-metadata';
 import express from 'express';
 import passport from 'passport';
 import session from 'express-session';

@@ -14,7 +14,8 @@ export const database = {
     name: process.env.DATABASE_ACCESS_PORTAL,
     port: process.env.DATABASE_PORT,
     hostess: process.env.DATABASE_HOSTESS,
-    private: process.env.DATABASE_ACCESS_KEY
+    private: process.env.DATABASE_ACCESS_KEY,
+    strategy: process.env.DATABASE_STRATEGY
 };
 
 export const local = {
