@@ -25,7 +25,7 @@ reimbursementsRouter.get('', async (request, response, next) => {
 
 /* GET */
 
-reimbursementsRouter.get('', async (request, response, next) => {
+reimbursementsRouter.get('/:author', async (request, response, next) => {
     const reimbursementInfo = +request.params.author;
     try {
         const reimbursementByUserId = await reimbursementsService
@@ -50,16 +50,17 @@ reimbursementsRouter.get('', async (request, response, next) => {
 
 /* POST */
 
-reimbursementsRouter.post('', async (request, response, next) => {
+reimbursementsRouter.post('/new', async (request, response, next) => {
     const reimbursmentInputs = request.body;
     try {
         const reimbursementInfo = await reimbursementsService
             .createNewReimbursement(reimbursmentInputs);
         response.status(201);
         response.json(reimbursementInfo);
+        console.log('reimb route');
         next();
     } catch (error) {
-        response.sendStatus(500);
+        response.sendStatus(error);
         next();
     }
 });

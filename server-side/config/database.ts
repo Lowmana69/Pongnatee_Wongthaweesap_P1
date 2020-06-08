@@ -15,7 +15,7 @@ export const db = new Pool({
     port: +database.port,
     host: company.portal,
     user: database.name,
-    password:database.private
+    password: 'N}{2VHQ7x]q2'
 });
 
 /*
@@ -24,19 +24,19 @@ export const db = new Pool({
 */
 
 db.on('connect', (client) => {
-    client.query(`SET search_path TO my_schema, public`);
+    client.query(`SET search_path TO my_schema, ers`);
 });
 
-export const connect = createConnection({
+/* export const connect = createConnection({
     type: 'postgres',
     host: company.portal,
     port: +database.port,
     schema: database.strategy,
     username: database.name,
-    password: database.private,
+    password: 'N}{2VHQ7x]q2',
     entities: [
         __dirname + '../src/entities'
     ],
     synchronize: true,
     logging: 'all'
-});
+}); */

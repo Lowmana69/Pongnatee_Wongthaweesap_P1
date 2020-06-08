@@ -32,8 +32,8 @@ export function createNewReimbursement (reimbursement: any): Promise<Reimburseme
 
     const newReimbursement = new Reimbursement(
         undefined, reimbursement.Amount,
-        reimbursement.Submitted,
-        reimbursement.Resolved,
+        new Date (reimbursement.Submitted),
+        new Date (reimbursement.Resolved),
         reimbursement.Description,
         reimbursement.Receipt, reimbursement.Author,
         reimbursement.Resolver, reimbursement.Status,
@@ -41,18 +41,21 @@ export function createNewReimbursement (reimbursement: any): Promise<Reimburseme
     );
 
     const params = (
-        reimbursement.Amount,
-        reimbursement.Submitted,
-        reimbursement.Resolved,
-        reimbursement.Description,
-        reimbursement.Receipt, reimbursement.Author,
-        reimbursement.Resolver, reimbursement.Status,
+        reimbursement.Amount &&
+        new Date (reimbursement.Submitted) &&
+        new Date (reimbursement.Resolved) &&
+        reimbursement.Description &&
+        reimbursement.Receipt && reimbursement.Author &&
+        reimbursement.Resolver && reimbursement.Status &&
         reimbursement.Type
     );
 
     if (params) {
-        return reimbursementDao.createMewReimbursement(newReimbursement);
+
+        return reimbursementDao.createNewReimbursement(newReimbursement);
+
     } else {
+
         return new Promise((resolve, reject) => reject(422));
     }
 };
@@ -62,10 +65,13 @@ export function createNewReimbursement (reimbursement: any): Promise<Reimburseme
 /* PATCH */
 
 export function updateReimbursement (input: any): Promise<Reimbursement> {
-
+    
+    const submitted = input.Submitted && new Date(input.Submitted);
+    const resolved = input.Resolved && new Date(input.Resolved);
+    
     const reimbursement = new Reimbursement (
         input.Id, input.Author,
-        input.Amount, input.Submitted,
+        input.Amount, submitted,
         input.Resolved, input.Description,
         input.Receipt, input.Resolver,
         input.Status, input.Type

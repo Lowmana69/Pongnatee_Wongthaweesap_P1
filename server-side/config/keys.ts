@@ -7,7 +7,10 @@ export const company = {
     auditor: process.env.COMPANY_AUDITOR,
     human_resources: process.env.COMPANY_HUMAN_RESOURCES,
     portal: process.env.COMPANY_ACCESS_PORTAL,
-    primary: process.env.COMPANY_ACCESS_PRIMARY
+    primary: process.env.COMPANY_ACCESS_PRIMARY,
+    empKey: process.env.COMPANY_EMPLOYEE_KEY,
+    resKey: process.env.COMPANY_RESOUCE_KEY,
+    finKey: process.env.COMPANY_MANAGER_KEY
 };
 
 export const database = {
@@ -19,5 +22,6 @@ export const database = {
 };
 
 export const local = {
-    pin: process.env.LOCALHOST
+    pin: process.env.LOCALHOST,
+    litigation: process.env.SESSION_CODE
 }

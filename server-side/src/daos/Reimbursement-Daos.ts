@@ -45,17 +45,17 @@ export function getAllReimbursementByUserID (reimb_author: number): Promise<Reim
 
 /* POST */
 
-export function createNewReimbursment (reimbursement: Reimbursement): Promise<Reimbursement> {
+export function createNewReimbursement (reimbursement: Reimbursement): Promise<Reimbursement> {
 
-    const sql = 'INSERT INTO ers_reimbursement (reimb_amount, reimb_submitted, \
+    const sql = `INSERT INTO ers_reimbursement (reimb_amount, reimb_submitted, \
         reimb_resolved, reimb_description, reimb_receipt, reimb_author, \
         reimb_resolver, reimb_status_id, reimb_type_id) VALUES \
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
 
     const params = [
         reimbursement.Amount,
-        reimbursement.Submitted,
-        reimbursement.Resolved,
+        reimbursement.Submitted.toDateString(),
+        reimbursement.Resolved.toDateString(),
         reimbursement.Description,
         reimbursement.Receipt, reimbursement.Author,
         reimbursement.Resolver, reimbursement.Status,
@@ -63,7 +63,7 @@ export function createNewReimbursment (reimbursement: Reimbursement): Promise<Re
     ];
 
     return db.query<ReimbursementRow>(sql, params)
-        .then(result => result.rows.map(row => Reimbursement.from(row)[0]));
+        .then(result => result.rows.map(row => Reimbursement.from(row))[0]);
 };
 
 /* ===================== UPDATE ================= */
@@ -83,11 +83,11 @@ export function updateReimbursment (reimbursement: Reimbursement): Promise<Reimb
 
     const params = [
         reimbursement.Amount,
-        reimbursement.Submitted,
-        reimbursement.Resolved,
+        reimbursement.Submitted.toDateString(),
+        reimbursement.Resolved.toDateString(),
         reimbursement.Description,
         reimbursement.Receipt, reimbursement.Resolver,
-        reimbursement.Status, reimbursement.Type, 
+        reimbursement.Status, reimbursement.Type,
         reimbursement.Id, reimbursement.Author
     ];
 

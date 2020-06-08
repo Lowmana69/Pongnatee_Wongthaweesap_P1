@@ -20,18 +20,24 @@ employeesRouter.get('', async (request, response, next) => {
 
         const employees = await employeesService.getAllEmployees();
 
+        response.set('Content-Type', 'application/json');
+
         response.json(employees);
+
+        next();
 
     } catch (error) {
 
         response.sendStatus(500);
+
+        next();
 
     } 
 });
 
 /* GET */
 
-employeesRouter.get('', async (request, response, next) => {
+employeesRouter.get('/:id', async (request, response, next) => {
 
     const employeeId = +request.params.id;
 

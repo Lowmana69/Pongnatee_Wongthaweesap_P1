@@ -1,10 +1,11 @@
 import crypto from 'crypto';
-import 'node';
+import '@types/node';
 
-export const validatePassword = async (password, hash, salt) => {
+export const validatePassword = async (password) => {
+    const salt = crypto.randomBytes(32).toString('hex');
     const hashVerification = crypto.pbkdf2Sync(password, salt,
          10000, 64, 'sha512').toString('hex');
-    return hash === hashVerification;
+    return password === hashVerification;
 };
 
 export const genPassword = async (password) => {
@@ -12,7 +13,6 @@ export const genPassword = async (password) => {
     const genHash = crypto.pbkdf2Sync(password, salt,
         10000, 64, 'sha512').toString('hex');
     return {
-        salt: salt,
-        hash: genHash
+        password: genHash
     }
 };
