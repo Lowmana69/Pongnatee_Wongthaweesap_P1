@@ -57,7 +57,6 @@ reimbursementsRouter.post('/new', async (request, response, next) => {
             .createNewReimbursement(reimbursmentInputs);
         response.status(201);
         response.json(reimbursementInfo);
-        console.log('reimb route');
         next();
     } catch (error) {
         response.sendStatus(error);

@@ -23,5 +23,9 @@ export const database = {
 
 export const local = {
     pin: process.env.LOCALHOST,
-    litigation: process.env.SESSION_CODE
+};
+
+export const access = {
+    primary: process.env.ACCESS_TOKEN,
+    secondary: process.env.REFESH_TOKEN
 }

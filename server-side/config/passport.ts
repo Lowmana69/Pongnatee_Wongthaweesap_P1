@@ -2,17 +2,12 @@
 
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
-import { getRepository } from 'typeorm';
 
 /* Import Files */
 
-import { Employee } from '../src/entities/Employee-Entity';
 import { validatePassword } from '../utils/passportUtils';
-
-/* Setting the Variables for the Model */
-
-const repo = getRepository(Employee);
-const User = repo;
+import { db } from './database';
+import { EmployeeRow } from '../src/models/Employee';
 
 /* Passport Paraneters/Arguments Set Separately */
 
@@ -22,24 +17,32 @@ const loginFields = {
 };
 
 const verification = async (username, password, done) => {
+    console.debug("Login process:", username);
 
-    const user = await User.findOne({Username: username});
+      .then((result)=> {
+        return done(null, result);
+      })
+
+    const sql = `SELECT ers_users_id, user_first_name, user_last_name, user_email, user_role_id \
+    FROM users WHERE user_email = $1 AND ers_password = $2`;
 
     try {
 
-        if (!user) { return done(null, false) }
+        const result = await db.query<EmployeeRow> (sql, [username, password])
+            .then((result) => { return done(null, result) });
 
-        const isValidated = await validatePassword(password);
+        const isValidated = await validatePassword(user_password, password);
 
         if (!isValidated) {
-            return done(null, user);
+            return done(null, result);
         } else {
             return done(null, false)
         }
 
     } catch (error) {
 
-        done(error);
+        console.error("/login: " + err);
+        return done(null, false, {message:'Please Check Your Email and Password'});
     }
 };
 
@@ -65,3 +68,24 @@ passport.deserializeUser((userId, done) => {
         done(error);
     }
 });
+
+    
+
+
+passport.serializeUser((user, done)=>{
+    log.debug("serialize ", user);
+    done(null, user.user_id);
+  });
+
+  passport.deserializeUser((id, done)=>{
+    log.debug("deserualize ", id);
+    db.one("SELECT user_id, user_name, user_email, user_role FROM users " +
+            "WHERE user_id = $1", [id])
+    .then((user)=>{
+      //log.debug("deserializeUser ", user);
+      done(null, user);
+    })
+    .catch((err)=>{
+      done(new Error(`User with the id ${id} does not exist`));
+    })
+  });

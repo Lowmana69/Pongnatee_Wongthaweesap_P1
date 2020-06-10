@@ -1,14 +1,11 @@
 /* Import Modules */
 
 import 'dotenv/config';
-import 'reflect-metadata';
 import express from 'express';
-import passport from 'passport';
-import session from 'express-session';
 
 /* Import Files */
 
-import { local, database } from '../config/keys';
+import { } from '../config/keys';
 import { db } from '../config/database';
 import { employeesRouter } from '../src/routers/Employee-Routers';
 import { reimbursementsRouter } from '../src/routers/Reimbursement-Routers';
@@ -26,29 +23,6 @@ app.set('PORT', PORT);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-/* Setting Up Express && PG Session */
-
-const pgStore = require('connect-pg-simple')(session);
-
-app.use(session({
-    store: new pgStore({
-        pool: db,
-        schemaName: database.strategy,
-        tableName: 'session',
-    }),
-    secret: local.litigation,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        maxAge: 24 * 60 * 60 * 1000
-    }
-}));
-
-/* Setting Up Passport */
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 /* Route Connections */
 

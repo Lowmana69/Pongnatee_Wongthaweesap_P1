@@ -73,7 +73,7 @@ employeesRouter.get('/:id', async (request, response, next) => {
 
 /* POST */
 
-employeesRouter.post('', async (request, response, next) => {
+employeesRouter.post('/register', async (request, response, next) => {
 
     const employeeInfo = request.body;
 

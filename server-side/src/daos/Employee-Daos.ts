@@ -7,7 +7,7 @@ import { Employee, EmployeeRow } from '../models/Employee';
 
 /* GET */
 
-export async function getAllEmployees (): Promise<Employee[]> {
+export function getAllEmployees (): Promise<Employee[]> {
 
     const sql = 'SELECT * FROM ers_users ORDER BY ers_users_id';
 
