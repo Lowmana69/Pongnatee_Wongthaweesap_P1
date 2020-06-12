@@ -71,18 +71,19 @@ reimbursementsRouter.post('/new', async (request, response, next) => {
 reimbursementsRouter.patch('', async (request, response, next) => {
     const reimbursementInput = request.body;
     try {
+
         const reimbursementUpdate = await reimbursementsService
             .updateReimbursement(reimbursementInput);
-        if (reimbursementUpdate) {
+        try {
             response.json(reimbursementUpdate);
-        } else {
-            response.sendStatus(404);
+        } catch (error) {
+            response.sendStatus(error);
         }
+
         next();
+
     } catch (error) {
-        console.log(error);
-        console.log(reimbursementInput);
-        response.sendStatus(500);
+        response.sendStatus(error);
         next();
     }
 });

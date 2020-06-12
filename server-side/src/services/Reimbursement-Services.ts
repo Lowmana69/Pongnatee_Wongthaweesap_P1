@@ -57,10 +57,10 @@ export function updateReimbursement (input: any): Promise<Reimbursement> {
     const resolved = input.Resolved && new Date(input.Resolved);
     
     const reimbursement = new Reimbursement (
-        input.Id, input.Author,
-        input.Amount, submitted,
-        input.Resolved, input.Description,
-        input.Receipt, input.Resolver,
+        input.Id, input.Amount,
+        submitted, resolved,
+        input.Description, input.Receipt,
+        input.Author, input.Resolver,
         input.Status, input.Type
     );
 
@@ -68,5 +68,5 @@ export function updateReimbursement (input: any): Promise<Reimbursement> {
         throw new Error('400');
     }
 
-    return reimbursementDao.updateReimbursment(reimbursement);
+    return reimbursementDao.updateReimbursement(reimbursement);
 };

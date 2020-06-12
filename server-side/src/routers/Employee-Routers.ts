@@ -102,25 +102,15 @@ employeesRouter.patch('', async (request, response, next) => {
     
     try {
         const employeeInfo = request.body;
-        
         const employeeUpdate = await employeesService.updateEmployee(employeeInfo);
-
         if (employeeUpdate) {
-
             response.json(employeeUpdate);
-
         } else {
-
             response.sendStatus(404);
-
         }
-
         next();
-
     } catch (error) {
-
         response.sendStatus(500);
-
         next();
     }
 });
