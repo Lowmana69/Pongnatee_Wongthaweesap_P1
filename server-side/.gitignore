@@ -4,3 +4,4 @@ __tests__
 database
 .DS_Store
 node_modules
+Request.rest
