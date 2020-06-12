@@ -5,8 +5,8 @@ export interface Reimbursement {
     Resolved: Date | string;
     Description: string;
     Receipt: string;
-    Author: number;
-    Resolver: number;
-    Status: number;
+    Author: string | number;
+    Resolver: string | number;
+    Status: string | number;
     Type: number;
 }

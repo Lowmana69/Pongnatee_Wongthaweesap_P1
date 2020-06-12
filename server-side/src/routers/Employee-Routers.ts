@@ -75,9 +75,9 @@ employeesRouter.get('/:id', async (request, response, next) => {
 
 employeesRouter.post('/register', async (request, response, next) => {
 
-    const employeeInfo = request.body;
-
+    
     try {
+        const employeeInfo = request.body;
     
         const newEmployee = await employeesService.createNewEmployee(employeeInfo);
 
@@ -99,10 +99,10 @@ employeesRouter.post('/register', async (request, response, next) => {
 
 employeesRouter.patch('', async (request, response, next) => {
 
-    const employeeInfo = request.body;
-
+    
     try {
-
+        const employeeInfo = request.body;
+        
         const employeeUpdate = await employeesService.updateEmployee(employeeInfo);
 
         if (employeeUpdate) {

@@ -5,7 +5,7 @@ import express from 'express';
 
 /* Import Files */
 
-import { } from '../config/keys';
+import { local } from '../config/keys';
 import { db } from '../config/database';
 import { employeesRouter } from '../src/routers/Employee-Routers';
 import { reimbursementsRouter } from '../src/routers/Reimbursement-Routers';
@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 
 /* Route Connections */
 
-app.use('/users', employeesRouter);
+app.use('/employees', employeesRouter);
 app.use('/tickets', reimbursementsRouter);
 
 /* Error Handler */

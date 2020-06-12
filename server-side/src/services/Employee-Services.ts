@@ -35,17 +35,13 @@ export function createNewEmployee (employee: any): Promise<Employee> {
         employee.firstName, employee.lastName,
         employee.Email, employee.Role
     );
-
-    const params = ( employee.Username, employee.Password,
-        employee.firstName, employee.lastName,
-        employee.Email, employee.Role
-    );
-
-    if (params) {
+    
+    try {
         return employeesDao.createNewEmployee(newEmployee);
-    } else {
-        return new Promise((resolve, reject) => reject(422));
+    } catch (error) {
+        return new Promise((resolve, reject) => reject(error));
     }
+    
 };
 
 

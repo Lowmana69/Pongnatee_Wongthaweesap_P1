@@ -1,0 +1,56 @@
+GET http://localhost:3000/employees
+
+
+####
+
+GET http://localhost:3000/tickets
+
+####
+
+POST http://localhost:3000/tickets/new
+Content-Type: application/json
+
+{
+        "Amount": 76.00,
+        "Submitted": "2019-01-10",
+        "Resolved": "2019-03-20",
+        "Description": "Not Available",
+        "Receipt": "Not Avaiable",
+        "Author": 1,
+        "Resolver": null,
+        "Status": 1,
+        "Type": 5
+}
+
+
+####
+
+PATCH http://localhost:3000/tickets
+Content-Type: application/json
+
+{
+        "Id": 3
+        "Amount": 76.00,
+        "Submitted": "2019-01-10",
+        "Resolved": "2019-03-20",
+        "Description": "Not Available",
+        "Receipt": "Not Avaiable",
+        "Author": 1,
+        "Resolver": null,
+        "Status": 1,
+        "Type": 4
+}
+
+####
+
+POST http://localhost:300/employees/register
+Content-Type: application/json
+
+{
+        "Username": "jDoe432544",
+        "Password": "g7d8f9g78deti",
+        "firstName": "John",
+        "lastName": "Doe",
+        "Email": "tester@gmail.com",
+        "Role": 1
+}

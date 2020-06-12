@@ -47,7 +47,7 @@ export function getEmployeeByID (id: number): Promise<Employee> {
 
 export function createNewEmployee (employee: Employee): Promise<Employee> {
 
-    const sql = `INSERT INTO ers_users (ers_username, ers_password, user_first_name \
+    const sql = `INSERT INTO ers_users (ers_username, ers_password, user_first_name, \
         user_last_name, user_email, user_role_id) VALUES ($1, $2, $3, $4, $5, $6) \
         RETURNING *`;
 
@@ -67,7 +67,7 @@ export function updateEmployee (employee: Employee): Promise<Employee> {
     const sql = `UPDATE ers_users SET ers_username = COALESCE($1, ers_username), \
     ers_password = COALESCE($2, ers_password), user_first_name = COALESCE($3, user_first_name), \
     user_last_name = COALESCE($4, user_last_name), user_email = COALESCE($5, user_email), \
-    user_role_id = COALESCE($6, user_role_id) WHERE ers_user_id = $7 RETURNING *`;
+    user_role_id = COALESCE($6, user_role_id) WHERE ers_users_id = $7 RETURNING *`;
 
     const params = [employee.Username, employee.Password, employee.firstName,
         employee.lastName, employee.Email, employee.Role, employee.Id];

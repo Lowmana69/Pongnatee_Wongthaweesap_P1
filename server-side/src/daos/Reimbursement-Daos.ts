@@ -72,19 +72,20 @@ export function createNewReimbursement (reimbursement: Reimbursement): Promise<R
 
 export function updateReimbursment (reimbursement: Reimbursement): Promise<Reimbursement> {
 
-    const sql = `UPDATE ers_reimbursemnt SET reimb_amount = COALESCE ($1, reimb_amount), \
+    const sql = `UPDATE ers_reimbursement SET reimb_amount = COALESCE ($1, reimb_amount), \
     reimb_submitted = COALESCE ($2, reimb_submitted), \
     reimb_resolved = COALESCE ($3, reimb_resolved), \
     reimb_description = COALESCE ($4, reimb_description), \
     reimb_receipt = COALESCE ($5, reimb_receipt), \
-    reimb_resolver = COALESCE ($7, reimb_resolver), \
-    reimb_status_id = COALESCE ($8, reimb_status_id) WHERE \
+    reimb_resolver = COALESCE ($6, reimb_resolver), \
+    reimb_status_id = COALESCE ($7, reimb_status_id), \
+    reimb_type_id = COALESCE ($8, reimb_type_id) WHERE \
     reimb_id = $9 AND reimb_author = $10`;
 
     const params = [
         reimbursement.Amount,
-        reimbursement.Submitted.toDateString(),
-        reimbursement.Resolved.toDateString(),
+        reimbursement.Submitted,
+        reimbursement.Resolved,
         reimbursement.Description,
         reimbursement.Receipt, reimbursement.Resolver,
         reimbursement.Status, reimbursement.Type,

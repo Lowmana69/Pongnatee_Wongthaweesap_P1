@@ -80,6 +80,8 @@ reimbursementsRouter.patch('', async (request, response, next) => {
         }
         next();
     } catch (error) {
+        console.log(error);
+        console.log(reimbursementInput);
         response.sendStatus(500);
         next();
     }

@@ -39,24 +39,11 @@ export function createNewReimbursement (reimbursement: any): Promise<Reimburseme
         reimbursement.Resolver, reimbursement.Status,
         reimbursement.Type
     );
-
-    const params = (
-        reimbursement.Amount &&
-        new Date (reimbursement.Submitted) &&
-        new Date (reimbursement.Resolved) &&
-        reimbursement.Description &&
-        reimbursement.Receipt && reimbursement.Author &&
-        reimbursement.Resolver && reimbursement.Status &&
-        reimbursement.Type
-    );
-
-    if (params) {
-
+    try {
         return reimbursementDao.createNewReimbursement(newReimbursement);
 
-    } else {
-
-        return new Promise((resolve, reject) => reject(422));
+    } catch (error) {
+        return new Promise((resolve, reject) => reject(error));
     }
 };
 

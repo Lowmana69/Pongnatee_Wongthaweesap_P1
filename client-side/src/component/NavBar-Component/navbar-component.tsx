@@ -1,41 +1,86 @@
 import React from 'react';
-import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
-import './navbar.component.css';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
 
-interface NavbarProps {
-    history: History;
-}
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      flexGrow: 1,
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+    },
+    title: {
+      flexGrow: 1,
+    },
+  }),
+);
 
-const NavbarComponent: React.FC<RouteComponentProps> = (props) => {
+export const NavBarComponent: React.FC = () => {
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
-    const renderOnCurrentPath = (path: string) => {
-        console.log(props.location.pathname);
 
-        return path === props.location.pathname ? 
-        <span className="sr-only">(current)</span> : <span></span>
-    }
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-    return (
-        <nav className="navbar navbar-dark bg-primary">
-            <a className="navbar-brand" href="#">Bank of Money</a>
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarNav">
-                <ul className="navbar-nav">
-                    <li className="nav-item active">
-                        <Link to="/home">Home {renderOnCurrentPath('/home') }</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/dashboard">Dashboard {renderOnCurrentPath('/accounts') }</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/request">Request {renderOnCurrentPath('/loans') }</Link>
-                    </li>
-                </ul>
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" className={classes.title}>
+            Tech Conniseur
+          </Typography>
+          {(
+            <div>
+              <IconButton
+                aria-label="account"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={open}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>Home</MenuItem>
+                <MenuItem onClick={handleClose}>Dashboard</MenuItem>
+                <MenuItem onClick={handleClose}>Logout</MenuItem>
+              </Menu>
             </div>
-        </nav>
-    )
+          )}
+        </Toolbar>
+      </AppBar>
+    </div>
+  );
 }
-
-export default withRouter(NavbarComponent);

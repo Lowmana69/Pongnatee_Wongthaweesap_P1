@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { createStyles, lighten, makeStyles, Theme } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -17,43 +17,15 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import {Delete, Check, NotInterested, FilterList} from '@material-ui/icons';
 
 import { Reimbursement } from '../../models/Reimbursement';
+import ActionButtons from '../Button-Component/action-button-component';
 
-interface Data {
-  calories: number;
-  carbs: number;
-  fat: number;
-  name: string;
-  protein: number;
-}
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-): Data {
-  return { name, calories, fat, carbs, protein };
-}
+import * as reimbursementRemote from '../../remote/reimbursement-remote';
 
 const rows = [
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Donut', 452, 25.0, 51, 4.9),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Honeycomb', 408, 3.2, 87, 6.5),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0),
-  createData('KitKat', 518, 26.0, 65, 7.0),
-  createData('Lollipop', 392, 0.2, 98, 0.0),
-  createData('Marshmallow', 318, 0, 81, 2.0),
-  createData('Nougat', 360, 19.0, 9, 37.0),
-  createData('Oreo', 437, 18.0, 63, 4.0),
+  
 ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -89,11 +61,11 @@ function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof Data;
+  id: keyof Reimbursement;
   label: string;
   numeric: boolean;
 }
-// ! Fix This
+
 const headCells: HeadCell[] = [
   { id: 'Id', numeric: true, disablePadding: true, label: 'Ticket #' },
   { id: 'Amount', numeric: true, disablePadding: false, label: 'Amount' },
@@ -110,16 +82,16 @@ const headCells: HeadCell[] = [
 interface EnhancedTableProps {
   classes: ReturnType<typeof useStyles>;
   numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Reimbursement) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
-  orderBy: string;
+  orderBy: string | number | symbol;
   rowCount: number;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-  const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+  const createSortHandler = (property: keyof Reimbursement) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
 
@@ -208,13 +180,13 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton aria-label="delete">
-            <DeleteIcon />
+            <Delete />
           </IconButton>
         </Tooltip>
       ) : (
         <Tooltip title="Filter list">
           <IconButton aria-label="filter list">
-            <FilterListIcon />
+            <FilterList />
           </IconButton>
         </Tooltip>
       )}
@@ -251,13 +223,53 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function EnhancedTable() {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
+  const [orderBy, setOrderBy] = React.useState<keyof Reimbursement>('Id');
   const [selected, setSelected] = React.useState<string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
+  const [reimbursements, setReimbursements] = useState<Reimbursement[]>([]);
+
+    const [inputAmount, setInputAmount] = useState('');
+    const [inputSubmitted, setInputSubmitted] = useState('');
+    const [inputDescription, setInputDescription] = useState('');
+    const [inputReceipt, setInputReceipt] = useState('');
+    const [inputAuthor, setInputAuthor] = useState('');
+    const [inputType, setInputType] = useState('');
+
+    useEffect(() => {
+      loadReimbursements();
+  }, [])
+
+  const addUser = async () => {
+      const payload = {
+          Amount: inputAmount,
+          Submitted: inputSubmitted,
+          Description: inputDescription,
+          Receipt: inputReceipt,
+          Author: inputAuthor,
+          Type: inputType
+
+      };
+
+      await reimbursementRemote.createReimbursement(payload);
+      setInputAmount('');
+      setInputSubmitted('');
+      setInputDescription('');
+      setInputReceipt('');
+      setInputAuthor('');
+      setInputType('');
+      setModalVisible(false);
+      loadReimbursements();
+  }
+
+  const loadReimbursements = () => {
+      reimbursementRemote.getAllReimbursements().then(reimbursement => {
+          setReimbursements(reimbursement);
+      });
+  }
+  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Reimbursement) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -333,17 +345,17 @@ export default function EnhancedTable() {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.Id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.Id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.Id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -353,7 +365,7 @@ export default function EnhancedTable() {
                         />
                       </TableCell>
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.name}
+                        {row.Id}
                       </TableCell>
                       <TableCell align="right">{row.Id}</TableCell>
                       <TableCell align="right">{row.Amount}</TableCell>
@@ -365,6 +377,9 @@ export default function EnhancedTable() {
                       <TableCell align="right">{row.Resolver}</TableCell>
                       <TableCell align="right">{row.Status}</TableCell>
                       <TableCell align="right">{row.Type}</TableCell>
+                      <TableCell>
+                        <ActionButtons />
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -373,6 +388,24 @@ export default function EnhancedTable() {
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
+              {reimbursements.map(reimbursements => {
+                return (<tr key={reimbursements.Id}>
+                    <th scope="row">{reimbursements.Id}</th>
+                    <td>{reimbursements.Amount}</td>
+                    <td>{typeof reimbursements.Submitted == 'string' ? 
+                            reimbursements.Submitted :
+                            reimbursements.Submitted.toDateString()}</td>
+                    <td>{typeof reimbursements.Resolved == 'string' ? 
+                            reimbursements.Resolved :
+                            reimbursements.Resolved.toDateString()}</td>
+                    <td>{reimbursements.Description}</td>
+                    <td>{ }</td> // !! Trying to add React-PDF to display image when clicked
+                    <td>{reimbursements.Author}</td>
+                    <td>{reimbursements.Resolver}</td>
+                    <td>{reimbursements.Status}</td>
+                    <td>{reimbursements.Type}</td>
+                </tr>)
+              })}
             </TableBody>
           </Table>
         </TableContainer>
@@ -393,21 +426,3 @@ export default function EnhancedTable() {
     </div>
   );
 }
-
-
-/* FAB */
-
-<Fab color="teal" aria-label="approve">
-  <CheckIcon />
-</Fab>
-<Fab color="red" aria-label="deny">
-  <NotInterestedIcon />
-</Fab>
-<Fab color="blue" aria-label="edit">
-  <NotInterestedIcon />
-</Fab>
-
-<Chip label="Pending" color="amber" icon={<PanToolIcon />} />
-<Chip label="Approved" color="teal" icon={<CheckCircleOutlineIcon />} />
-<Chip label="Denied" color="red" icon={<HighlightOffIcon />} />
-<Chip label="See Manager" color="yellow" icon={<FaceIcon />} />
